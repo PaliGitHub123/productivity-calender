@@ -1,5 +1,7 @@
 //todolist: todolists in one db; max 8; deleteable
 //todos: crud logic, date
+// TODO: add dates to todos
+// TODO: implement indexedDB saving etc
 
 const addTodoListButton = document.getElementById("add-todo-list");
 const mainPage = document.getElementById("main-page");
