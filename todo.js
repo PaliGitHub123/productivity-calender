@@ -43,24 +43,26 @@ function addTodoList (){
     mainPage.appendChild(mainDiv.cloneNode(true));
 }
 
-function addTodo (){
-    if(input.value == ""){
-        console.log(input.value);
-    }else{
-        todo.innerHTML = input.value;
-        todoList.appendChild(todo);
-        todo.appendChild(deleteTodoButton.cloneNode());
-    }
-    input.value = "";
-}
-    
-
 mainPage.addEventListener("click", function(e){
     if(e.target === addTodoListButton){
         addTodoList();
     }
-
     if(e.target.id === "submit-todolist"){
-        addTodo();
+        const parentDiv = e.target.closest("#top-todo-div");
+        const currentInput = parentDiv.querySelector("#input-todolist");
+        addTodo(currentInput);
     }
 });
+
+function addTodo(input) {
+    if(input.value === "") {
+        console.log("Leer!");
+    } else {
+        const newTodo = document.createElement("li");
+        newTodo.innerHTML = input.value;
+        const deleteBtn = deleteTodoButton.cloneNode(true);
+        newTodo.appendChild(deleteBtn);
+        input.closest("#main-todo-div").querySelector("#todolist").appendChild(newTodo);
+        input.value = "";
+    }
+}
