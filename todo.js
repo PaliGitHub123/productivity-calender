@@ -36,23 +36,43 @@ topDiv.appendChild(input);
 topDiv.appendChild(submitButton);
 //todolist elements end
 
-const todo = document.createElement("li");
-
+//todo elements
 const deleteTodoButton = document.createElement("button");
+deleteTodoButton.classList.add("delete-todo");
 deleteTodoButton.innerHTML = "X";
+//todo elements end
+
+let todoListCounter = 0;
 
 function addTodoList (){
     mainPage.appendChild(mainDiv.cloneNode(true));
 }
 
+function deleteTodoList (deletButton){
+    mainPage.removeChild(deletButton.closest(".main-todo-div"));
+}
+
 mainPage.addEventListener("click", function(e){
     if(e.target === addTodoListButton){
+        if(todoListCounter == 8){
+            return;
+        }
         addTodoList();
+        todoListCounter++;
     }
+
+    if(e.target.classList.contains("delete-todolist")){
+        deleteTodoList(e.target);
+    }
+
     if(e.target.classList.contains("submit-todolist")){
         const parentDiv = e.target.closest(".top-todo-div");
         const currentInput = parentDiv.querySelector(".input-todolist");
         addTodo(currentInput);
+    }
+
+    if(e.target.classList.contains("delete-todo")){
+        deleteTodo(e.target);
     }
 });
 
@@ -62,9 +82,17 @@ function addTodo(input) {
     } else {
         const newTodo = document.createElement("li");
         newTodo.innerHTML = input.value;
+        newTodo.classList.add("todo");
         const deleteBtn = deleteTodoButton.cloneNode(true);
         newTodo.appendChild(deleteBtn);
         input.closest(".main-todo-div").querySelector(".todolist").appendChild(newTodo);
         input.value = "";
     }
 }
+
+function deleteTodo(deleteButton){
+    const todo = deleteButton.closest(".todo");
+    deleteButton.closest(".todolist").removeChild(todo);
+}
+
+
