@@ -4,7 +4,6 @@
 const addTodoListButton = document.getElementById("add-todo-list");
 const mainPage = document.getElementById("main-page");
 
-
 //todolist elements
 const mainDiv = document.createElement("div");
 mainDiv.id = "main-todo-div";
@@ -25,17 +24,43 @@ input.id = "input-todolist";
 
 const submitButton = document.createElement("button");
 submitButton.id = "submit-todolist";
-submitButton.innerHTML = "+"
+submitButton.innerHTML = "+";
+
+mainDiv.appendChild(todoList);
+mainDiv.appendChild(topDiv);
+
+topDiv.appendChild(deletListButton);
+topDiv.appendChild(input);
+topDiv.appendChild(submitButton);
+//todolist elements end
 
 const todo = document.createElement("li");
 
-addTodoListButton.addEventListener("click", function(){
-    mainPage.appendChild(mainDiv);
+const deleteTodoButton = document.createElement("button");
+deleteTodoButton.innerHTML = "X";
 
-    mainDiv.appendChild(todoList);
-    mainDiv.appendChild(topDiv);
+function addTodoList (){
+    mainPage.appendChild(mainDiv.cloneNode(true));
+}
 
-    topDiv.appendChild(deletListButton);
-    topDiv.appendChild(input);
-    topDiv.appendChild(submitButton);
+function addTodo (){
+    if(input.value == ""){
+        console.log(input.value);
+    }else{
+        todo.innerHTML = input.value;
+        todoList.appendChild(todo);
+        todo.appendChild(deleteTodoButton.cloneNode());
+    }
+    input.value = "";
+}
+    
+
+mainPage.addEventListener("click", function(e){
+    if(e.target === addTodoListButton){
+        addTodoList();
+    }
+
+    if(e.target.id === "submit-todolist"){
+        addTodo();
+    }
 });
