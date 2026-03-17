@@ -1,10 +1,12 @@
 //todolist: todolists in one db; max 8; deleteable
 //todos: crud logic, date
+// TODO: xss prevention + safety
 // TODO: add dates to todos
 // TODO: implement indexedDB saving etc
 
 const addTodoListButton = document.getElementById("add-todo-list");
 const mainPage = document.getElementById("main-page");
+const todoListNameInput = document.getElementById("todo-list-name");
 
 //todolist elements
 const mainDiv = document.createElement("div");
@@ -12,6 +14,8 @@ const mainDiv = document.createElement("div");
 const todoList = document.createElement("ul");
 
 const topDiv = document.createElement("div");
+
+const todoListName = document.createElement("p");
 
 mainDiv.classList.add("main-todo-div");
 todoList.classList.add("todolist");
@@ -30,6 +34,7 @@ const submitButton = document.createElement("button");
 submitButton.classList.add("submit-todolist");
 submitButton.innerHTML = "+";
 
+mainDiv.appendChild(todoListName);
 mainDiv.appendChild(todoList);
 mainDiv.appendChild(topDiv);
 
@@ -47,6 +52,10 @@ deleteTodoButton.innerHTML = "X";
 let todoListCounter = 0;
 
 function addTodoList (){
+    if(todoListNameInput.value == ""){
+        return;
+    }
+    todoListName.innerHTML = todoListNameInput.value;
     mainPage.appendChild(mainDiv.cloneNode(true));
 }
 
@@ -65,6 +74,7 @@ mainPage.addEventListener("click", function(e){
 
     if(e.target.classList.contains("delete-todolist")){
         deleteTodoList(e.target);
+        todoListCounter--;
     }
 
     if(e.target.classList.contains("submit-todolist")){
