@@ -6,7 +6,7 @@
 
 const addTodoListButton = document.getElementById("add-todo-list");
 const mainPage = document.getElementById("main-page");
-const todoListNameInput = document.getElementById("todo-list-name");
+const todoListNameInput = document.getElementById("todo-list-name-input");
 
 //todolist elements
 const mainDiv = document.createElement("div");
@@ -20,7 +20,7 @@ const todoListName = document.createElement("p");
 mainDiv.classList.add("main-todo-div");
 todoList.classList.add("todolist");
 topDiv.classList.add("top-todo-div");
-
+todoListName.classList.add("todo-list-name");
 
 const deletListButton = document.createElement("button");
 deletListButton.classList.add("delete-todolist");
