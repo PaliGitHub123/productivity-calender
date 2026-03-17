@@ -1,0 +1,303 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+/* ── Variables ──────────────────────────────────────────── */
+:root {
+  --bg:          #0f0f11;
+  --surface:     #18181c;
+  --surface-2:   #222228;
+  --border:      #2e2e38;
+  --border-soft: #25252d;
+  --accent:      #6c63ff;
+  --accent-dim:  rgba(108, 99, 255, 0.15);
+  --danger:      #ff4f6a;
+  --danger-dim:  rgba(255, 79, 106, 0.12);
+  --text-1:      #f0f0f5;
+  --text-2:      #9090a8;
+  --text-3:      #55556a;
+  --radius:      14px;
+  --radius-sm:   8px;
+  --shadow:      0 4px 24px rgba(0,0,0,0.4);
+  --shadow-lg:   0 8px 40px rgba(0,0,0,0.55);
+}
+
+/* ── Reset ──────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text-1);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* subtle grid texture */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border-soft) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-soft) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Root / Page ────────────────────────────────────────── */
+#root { position: relative; z-index: 1; }
+
+#main-page {
+  min-height: 100vh;
+  display: grid;
+  /* 2-column grid for the list cards */
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: minmax(340px, auto);
+  gap: 24px;
+  padding: 40px 48px 120px; /* bottom padding for sticky bar */
+  align-items: start;
+}
+
+/* ── Sticky Center Bar ──────────────────────────────────── */
+/* Wrap the three buttons in a sticky bar that sits at the bottom center */
+#main-page > button {
+  /* pulled out of grid flow – handled below */
+}
+
+/* The three buttons are direct children of #main-page but we want them
+   sticky at the bottom. We use a trick: place them in a fixed bar via
+   a pseudo-positioned wrapper approach. Since we can't change the HTML,
+   we select all direct button children. */
+#add-todo-list,
+#calender,
+#p2p {
+  position: fixed;
+  bottom: 28px;
+  z-index: 100;
+  border: none;
+  cursor: pointer;
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  /* remove from grid */
+  grid-column: unset;
+}
+
+#add-todo-list {
+  left: 50%;
+  transform: translateX(-50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 1.6rem;
+  line-height: 1;
+  box-shadow: 0 0 0 6px var(--accent-dim), var(--shadow);
+}
+#add-todo-list:hover {
+  transform: translateX(-50%) scale(1.1);
+  box-shadow: 0 0 0 10px var(--accent-dim), var(--shadow-lg);
+}
+
+#calender {
+  left: calc(50% - 80px);
+  transform: translateX(-100%);
+  padding: 0 22px;
+  height: 44px;
+  border-radius: 22px;
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+#calender:hover {
+  background: var(--surface);
+  color: var(--text-1);
+  border-color: var(--accent);
+}
+
+#p2p {
+  left: calc(50% + 80px);
+  padding: 0 22px;
+  height: 44px;
+  border-radius: 22px;
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  min-width: 80px;
+}
+#p2p::after { content: 'QR'; }
+#p2p:hover {
+  background: var(--surface);
+  color: var(--text-1);
+  border-color: var(--accent);
+}
+
+/* ── Todo List Card ─────────────────────────────────────── */
+.main-todo-div {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  animation: cardIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transition: border-color 0.2s;
+}
+.main-todo-div:hover {
+  border-color: var(--accent);
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(18px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── Top Bar ────────────────────────────────────────────── */
+.top-todo-div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.input-todolist {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-1);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  padding: 8px 12px;
+  outline: none;
+  transition: border-color 0.18s;
+}
+.input-todolist::placeholder { color: var(--text-3); }
+.input-todolist:focus { border-color: var(--accent); }
+
+.submit-todolist {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.18s, transform 0.15s;
+}
+.submit-todolist:hover { background: #5a52e0; transform: scale(1.08); }
+
+.delete-todolist {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--danger);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.18s, transform 0.15s;
+  margin-left: auto;
+  order: 99; /* push to far right */
+}
+.delete-todolist:hover { background: var(--danger-dim); transform: scale(1.15); }
+
+/* reorder within flex: input first, then +, then X */
+.input-todolist { order: 1; }
+.submit-todolist { order: 2; }
+.delete-todolist { order: 3; }
+
+/* ── Todo List ──────────────────────────────────────────── */
+.todolist {
+  list-style: none;
+  padding: 12px 14px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+  min-height: 200px;
+  max-height: 380px;
+}
+
+.todolist::-webkit-scrollbar { width: 4px; }
+.todolist::-webkit-scrollbar-track { background: transparent; }
+.todolist::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ── Todo Item ──────────────────────────────────────────── */
+.todo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  color: var(--text-1);
+  animation: todoIn 0.2s ease both;
+  transition: border-color 0.18s, background 0.18s;
+}
+.todo:hover { border-color: var(--border); background: var(--bg); }
+
+@keyframes todoIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* bullet dot */
+.todo::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+/* todo text fills remaining space */
+.todo { flex-wrap: nowrap; }
+
+.delete-todo {
+  margin-left: auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--text-3);
+  font-size: 0.65rem;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.15s, background 0.15s;
+  line-height: 1;
+}
+.delete-todo:hover { color: var(--danger); background: var(--danger-dim); }
+
+/* ── Responsive: max 2 columns, scroll after 4 cards ────── */
+@media (max-width: 700px) {
+  #main-page {
+    grid-template-columns: 1fr;
+    padding: 24px 20px 110px;
+  }
+}
