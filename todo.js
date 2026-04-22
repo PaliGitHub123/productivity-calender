@@ -115,10 +115,29 @@ function deleteTodo(deleteButton){
     deleteButton.closest(".todolist").removeChild(todo);
 }
 
-function displayPeerId(id){
-    if(id){
-        alert("My peer ID is: " + id);
-    }else{
-        alert("id not ready yet!");
+peer.on("open", function(id) {
+    displayPeerId(id);
+});
+
+peer.on("connection", function(conn) {
+    conn.on("data", function(data) {
+        console.log("Empfangen:", data);
+    });
+});
+
+function displayPeerId(id) {
+    if (id) {
+        const destinationID = prompt("Deine ID: " + id + "\nID des anderen eingeben:");
+
+        if (destinationID) {
+            const conn = peer.connect(destinationID);
+
+            conn.on("open", function() {
+                console.log("Verbunden!");
+                conn.send("Hallo!");
+            });
+        }
+    } else {
+        alert("ID not ready yet!");
     }
 }
